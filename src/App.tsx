@@ -1,34 +1,79 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useEffect, useState } from 'react'
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import Button from "@mui/material/Button";
+import Typography from "@mui/material/Typography";
+import Container from "@mui/material/Container";
+
+import { getFeeds, IUser } from "./Helpers/backend";
+import { authContext } from "./Helpers/authContext";
+import LoginScreen from "./Components/LoginScreen/LoginScreen";
+import CreateScreen from "./Components/CreateScreen/CreateScreen";
+import Feed from './Components/Feed/Feed';
+
+
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [data, setData] = useState<any>([]);
+  const [user, setUser] = useState<IUser | null | void>(null);
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+  const [formScreen, SetFormScreen] = useState(true);
+
+  function onSignOut() {
+    SetFormScreen(true);
+    setUser(null);
+  }
+  
+
+  if (user) {
+    return (
+      <authContext.Provider value={{ user, onSignOut }}>
+        <Router>
+          <Routes>
+            <Route
+              path="/"
+              element={<Feed />}
+            /> 
+          </Routes>
+        </Router>
+      </authContext.Provider>
+    );
+  } else {
+    return (
+      <>
+        <Container maxWidth="sm">
+          <Typography variant="h3" component="div" margin={2}>
+            Upvotes
+          </Typography>
+          
+          <Typography variant="body1" margin={2}>
+            {formScreen
+              ? `Digite e-mail e senha para fazer Login .`
+              : `Digite e-mail e senha para se cadastrar .`}{" "}
+            <br />
+            {formScreen ? `Caso não tenha usuário` : `Já tenho usuário`}
+            <Button
+              variant="text"
+              onClick={() => {
+                formScreen ? SetFormScreen(false) : SetFormScreen(true);
+              }}
+            >
+              Clique aqui
+            </Button>
+          </Typography>
+          {formScreen ? (
+            <LoginScreen onSignIn={setUser} />
+          ) : (
+            <CreateScreen onSignIn={setUser} />
+          )}
+        </Container>
+      </>
+    );
+  }
 }
 
 export default App
