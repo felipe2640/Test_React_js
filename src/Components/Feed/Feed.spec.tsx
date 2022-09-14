@@ -12,10 +12,9 @@ const setFetchReturnData = (data:any) => {
   ) as Mock
 };
 
-describe("General CoinList test", () => {
+describe("General Feed test", () => {
   beforeAll(() => {
-    setFetchReturnData([
-      
+    setFetchReturnData([    
   {
     authorId: 0,
     content: "string"

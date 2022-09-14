@@ -9,7 +9,11 @@ function Feed(){
   const [filteredData, setFilteredData] = useState<any>([]);
   const [filterText, setFilterText] = useState("");
   useEffect(() => {
-    getFeeds().then(setData)
+    fetch(
+      `${import.meta.env.VITE_API}feeds`
+    )
+      .then((resp) => resp.json())
+      .then(setData) as any
   }, []);
 
   useEffect(() => {
