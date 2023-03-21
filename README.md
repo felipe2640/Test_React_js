@@ -22,7 +22,7 @@ $ cd Test_React_js
 #Run the application in development mode with Docker
 $  npm install
 ```
-Once you have installed the dependencies, you can start the development server by running:
+Once you have installed the dependencies
 
 This project uses Vitest for testing. To run the tests, you can use the following command:
 
